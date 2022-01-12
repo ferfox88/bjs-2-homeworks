@@ -15,19 +15,20 @@ class AlarmClock {
     }
 
     removeClock(id) {
+        let countAlarmBefore = this.alarmCollection.length;
         this.alarmCollection = this.alarmCollection.filter(item => item.id !== id);
+        let countAlarmAfter = this.alarmCollection.length;
+        return countAlarmAfter < countAlarmBefore;
     }
 
     getCurrentFormattedTime() {
-        const d = new Date();
-        let currentTime = d.toLocaleTimeString().slice(0, 5);
-        return currentTime;
+        return (new Date()).toLocaleTimeString().slice(0, 5);
     }
 
     start() {
         let checkClock = (alarmClock) => {
-            if (alarmClock === this.getCurrentFormattedTime())
-                return alarmClock.callback();
+            if (alarmClock.time === this.getCurrentFormattedTime())
+                alarmClock.callback();
         }
 
         if (this.timerId === null) {
@@ -40,17 +41,17 @@ class AlarmClock {
     stop() {
         if (this.timerId) {
             clearInterval(this.timerId);
-            (this.timerId = null);
+            this.timerId = null;
         }
     }
 
     printAlarms() {
-        return this.alarmCollection.forEach(alarmClock => console.log(id + "-" + time));
+        return this.alarmCollection.forEach(alarmClock => console.log(alarmClock.id + "-" + alarmClock.time));
     }
 
     clearAlarms() {
-        stop();
-        return this.alarmCollection = [];
+        this.stop();
+        this.alarmCollection = [];
     }
 }
 
@@ -62,3 +63,4 @@ phoneAlarm.addClock("14:02", () => {
     phoneAlarm.clearAlarms();
     phoneAlarm.printAlarms();
 }, 3);
+phoneAlarm.printAlarms();
